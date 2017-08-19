@@ -1,33 +1,38 @@
-var cards = [{
-	// newCardName
-}];
+var cards = [];
 
 var createCard = document.getElementById('createCard');
 var newCardName = document.getElementById('newCardName');
 var addTheDamnCard = document.getElementById('addTheDamnCard');
-var cardIDnumber = 0;
-var deleteButton = document.getElementById('deleteButton');
+// var deleteButton = document.getElementById('deleteButton');
+
+
 createCard.addEventListener("click", function() {
-	
+	writeToArray();
 	domString();	
+	addListenersToDeleteButton();
 	
 })
+
+function writeToArray() {
+	cards.push({name: newCardName.value})
+}
+
 
 function domString() {
 	for (var i = 0; i < cards.length; i++) {
 	var cardString = '';
 	
 	var newCard ="";
-	newCard += `<div id="card_${cardIDnumber}"class="cardAdd">`;
-	newCard += `<h1>` + newCardName.value + `</h1>`;
-	newCard += `<input id="deleteButton" type="submit" value="Delete">`;
+	newCard += `<div class="cardClass" id="card_${i}"class="cardAdd">`;
+	newCard += `<h1>` + cards[i].name + `</h1>`;
+	newCard += `<input id="deleteButton_${i}" type="button" value="Delete" class="del">`;
 	newCard += `</div>`;
 	cardString += newCard;
-	cardIDnumber++;
 	}
 
 	
 	writeToDom(cardString);
+	
 }
 
 function writeToDom(strang) {
@@ -35,17 +40,22 @@ function writeToDom(strang) {
 }
 
 function addListenersToDeleteButton() {
-	var delButtonId = `card_${cardIDnumber}`; 
-	document.getElementById(delButtonId).addEventListener('click', function(e){ deleteCard(e)});
+	for(var j=0; j<cards.length; j++){
+		var delButtonId = `deleteButton_${j}`;
+		console.log("delButtonId", j);
+		document.getElementById(delButtonId).addEventListener('click', deleteCard);
+	}
 
 }
 
 //work from the button to its parent (div container you want to delete.  then the main div and delete the specific chile )
 function deleteCard(e) {
 	var divNode = e.currentTarget.parentNode;
-	var mainDivParent = document.getElementById("card_${cardIDnumber}");
-	mainDivParent = removeChild(divNode);
-
+	console.log("inDeleteCard", divNode);
+	var mainDivParent = document.getElementById("addTheDamnCard");
+	console.log("parent", mainDivParent);
+	mainDivParent.removeChild(divNode);
+console.log("inDelete Card", 	divNode);
 	// var elem = document.getElementById($cardIDnumber);
 	// elem.parentNode.removeChild(elem);
 }
